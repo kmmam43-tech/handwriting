@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="개인정보 없이 참여하는 손글씨 기록 웹 프로그램" />
+    <meta name="theme-color" content="#17212b" />
+    <title>손글씨 기록 | 익명 참여</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css?v=5" />
+    <script src="./app.js?v=5" defer></script>
+  </head>
+  <body>
+    <main class="workspace">
+      <article id="landing-view" class="paper" aria-labelledby="page-title">
+        <header class="paper-header">
+          <a class="wordmark" href="./" aria-label="손글씨 기록 처음으로">
+            <svg viewBox="0 0 36 36" aria-hidden="true">
+              <path d="M7 27.5h22" />
+              <path d="m10 24 14.8-14.8 3 3L13 27h-3v-3Z" />
+              <path d="m22.6 11.4 2-2a2.1 2.1 0 0 1 3 0l.1.1a2.1 2.1 0 0 1 0 3l-2 2" />
+            </svg>
+            <span>손글씨 기록</span>
+          </a>
+          <div class="local-status"><span aria-hidden="true"></span>서버 전송 없음</div>
+        </header>
+
+        <div class="paper-body">
+          <section class="brief">
+            <p class="section-mark">참여 안내</p>
+            <h1 id="page-title">마우스로 쓰고,<br />파일로 간직합니다.</h1>
+            <p class="lead">
+              제시된 한 문장을 평소 글씨대로 작성해 주세요. 이름이나 학번은
+              받지 않으며, 결과는 이 컴퓨터에만 저장됩니다.
+            </p>
+            <ol class="steps" aria-label="참여 순서">
+              <li><span>1</span><p><strong>익명 아이디 확인</strong>페이지를 열 때 자동으로 만들어집니다.</p></li>
+              <li><span>2</span><p><strong>문장 작성</strong>다음 화면에서 마우스로 한 문장을 씁니다.</p></li>
+              <li><span>3</span><p><strong>내 컴퓨터에 저장</strong>JSON과 PNG 파일을 내려받습니다.</p></li>
+            </ol>
+          </section>
+
+          <section class="entry-panel" aria-labelledby="entry-title">
+            <div id="entry-view">
+              <span class="sheet-number" aria-hidden="true">01</span>
+              <p class="section-mark">참여 준비</p>
+              <h2 id="entry-title">익명 아이디를 확인하세요</h2>
+              <p class="entry-description">비밀번호나 개인정보 입력은 필요하지 않습니다.</p>
+              <div class="identity-slip">
+                <span>이번 참여 아이디</span>
+                <strong id="participant-id" aria-live="polite">생성 중…</strong>
+                <small><i aria-hidden="true"></i>사용할 준비가 되었습니다</small>
+              </div>
+              <button id="start-button" class="primary-button" type="button" disabled>
+                이 아이디로 시작하기
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6" /></svg>
+              </button>
+              <p class="device-note">최신 Chrome이 설치된 PC와 마우스를 사용해 주세요.</p>
+            </div>
+
+          </section>
+        </div>
+
+        <footer class="paper-footer">
+          <p>이 페이지는 입력 내용을 외부 서버로 보내지 않습니다.</p>
+          <p>Handwriting record · 2026</p>
+        </footer>
+      </article>
+
+      <article id="writing-view" class="paper writing-paper" aria-labelledby="writing-title" hidden>
+        <header class="paper-header writing-header">
+          <div class="wordmark">
+            <svg viewBox="0 0 36 36" aria-hidden="true">
+              <path d="M7 27.5h22" />
+              <path d="m10 24 14.8-14.8 3 3L13 27h-3v-3Z" />
+              <path d="m22.6 11.4 2-2a2.1 2.1 0 0 1 3 0l.1.1a2.1 2.1 0 0 1 0 3l-2 2" />
+            </svg>
+            <span>손글씨 기록</span>
+          </div>
+          <div class="session-id">참여 아이디 <strong id="writing-participant-id"></strong></div>
+        </header>
+
+        <div class="writing-body">
+          <section class="writing-intro">
+            <div>
+              <p class="section-mark">작성할 문장</p>
+              <h1 id="writing-title">맑은 하늘 아래 바람이 조용히 불어온다.</h1>
+              <p>문장을 보고 아래 빈 공간에 마우스로 한 줄로 써 주세요.</p>
+            </div>
+            <div id="writing-status" class="writing-status" aria-live="polite">
+              <i aria-hidden="true"></i>
+              <span>입력을 기다리고 있습니다</span>
+            </div>
+          </section>
+
+          <section class="canvas-section" aria-label="손글씨 입력 영역">
+            <div class="canvas-labels" aria-hidden="true">
+              <span>여기부터 작성하세요</span>
+              <span>마우스 왼쪽 버튼을 누른 채 이동</span>
+            </div>
+            <div class="canvas-frame">
+              <canvas
+                id="handwriting-canvas"
+                width="1400"
+                height="420"
+                aria-label="마우스로 손글씨를 작성하는 캔버스"
+              ></canvas>
+              <div id="canvas-hint" class="canvas-hint" aria-hidden="true">
+                <svg viewBox="0 0 48 48">
+                  <path d="m12 35 19-19 5 5-19 19h-5v-5Z" />
+                  <path d="m29 18 3-3a3.5 3.5 0 0 1 5 0l1 1a3.5 3.5 0 0 1 0 5l-3 3" />
+                  <path d="M9 41h30" />
+                </svg>
+                <span>마우스로 글씨를 써 보세요</span>
+              </div>
+            </div>
+          </section>
+
+          <div id="writing-actions" class="writing-actions">
+            <button id="reset-button" class="reset-button" type="button" disabled>
+              전체 초기화
+            </button>
+            <p>완료하면 JSON과 PNG를 기본 다운로드 폴더에 저장합니다.</p>
+            <button id="complete-button" class="complete-button" type="button" disabled>
+              완료 및 파일 저장
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 19h14" /></svg>
+            </button>
+          </div>
+
+          <section id="completion-panel" class="completion-panel" hidden aria-live="polite">
+            <div class="completion-check" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7" /></svg>
+            </div>
+            <div>
+              <h2>두 파일의 저장을 시작했습니다</h2>
+              <p id="save-location-message">브라우저의 Downloads 폴더에서 확인할 수 있습니다.</p>
+              <ul>
+                <li><span>JSON</span><strong id="json-filename"></strong></li>
+                <li><span>PNG</span><strong id="png-filename"></strong></li>
+              </ul>
+            </div>
+            <button id="new-session-button" class="secondary-button" type="button">새 참여 시작</button>
+          </section>
+        </div>
+
+        <footer class="paper-footer">
+          <p>마우스를 누른 동안의 좌표와 시간만 기록합니다.</p>
+          <p>입력 내용은 외부 서버로 전송되지 않습니다.</p>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
